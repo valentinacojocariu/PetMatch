@@ -1,0 +1,57 @@
+﻿@page
+@model PetMatch.Pages.AdoptionRequests.MyRequestsModel
+
+@{
+    ViewData["Title"] = "Cererile Mele";
+}
+
+<h1>Istoricul Cererilor Mele</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Animal</th>
+            <th>Data Cererii</th>
+            <th>Mesaj</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.MyAdoptionRequests)
+        {
+            <tr>
+                <td>
+                    <b>@item.Animal?.Name</b>
+                </td>
+                <td>
+                    @item.RequestDate.ToShortDateString()
+                </td>
+                <td>
+                    Cerere pentru @item.Animal?.Name
+                </td>
+                <td>
+                    @if (item.Status == "Approved")
+                    {
+                        <span class="badge bg-success" style="font-size: 1em;">✅ ACCEPTAT</span>
+                        <br />
+
+                        <small class="text-success">Prietenul tau te asteapta!</small>
+                    }
+                    else if (item.Status == "Rejected")
+                    {
+                        <span class="badge bg-danger" style="font-size: 1em;">❌ RESPINS</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning text-dark" style="font-size: 1em;">⏳ ÎN AȘTEPTARE</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (Model.MyAdoptionRequests.Count == 0)
+{
+    <div class="alert alert-info">Nu ai trimis nicio cerere de adopție momentan. <a href="/Animals/Index">Vezi animalele!</a></div>
+}

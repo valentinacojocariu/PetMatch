@@ -1,0 +1,87 @@
+﻿@page
+@model PetMatch.Pages.AdoptionRequests.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.AdoptionRequest[0].RequestDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AdoptionRequest[0].Message)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AdoptionRequest[0].Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AdoptionRequest[0].Animal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AdoptionRequest[0].Member)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.AdoptionRequest) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RequestDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Message)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Animal.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Member.Email)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
+            </td>
+            <td>
+                @if (item.Status == "Approved")
+                {
+                    <span class="badge bg-success">Acceptat</span>
+                }
+                else if (item.Status == "Rejected")
+                {
+                    <span class="badge bg-danger">Respins</span>
+                }
+                else
+                {
+                    <span class="badge bg-warning text-dark">În așteptare</span>
+                }
+
+                @if (User.IsInRole("Admin") && item.Status == "Pending")
+                {
+                    <br /> <div class="btn-group mt-2">
+                        <form method="post" asp-page-handler="Approve" asp-route-id="@item.ID" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-success">✓ Acceptă</button>
+                        </form>
+
+                        <form method="post" asp-page-handler="Reject" asp-route-id="@item.ID" style="display:inline; margin-left:5px;">
+                            <button type="submit" class="btn btn-sm btn-danger">✗ Respinge</button>
+                        </form>
+                    </div>
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
