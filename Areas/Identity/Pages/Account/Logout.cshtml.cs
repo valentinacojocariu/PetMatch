@@ -19,8 +19,8 @@ namespace PetMatch.Areas.Identity.Pages.Account
 
         public LogoutModel(SignInManager<IdentityUser> signInManager, ILogger<LogoutModel> logger)
         {
+            _signInManager = signInManager;
             _logger = logger;
-          
         }
 
         public async Task<IActionResult> OnPost(string returnUrl = null)

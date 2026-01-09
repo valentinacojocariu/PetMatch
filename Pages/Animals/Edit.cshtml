@@ -11,7 +11,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form method="post">
+        <<form method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Animal.ID" />
             <div class="form-group">
@@ -35,9 +35,31 @@
                 <input asp-for="Animal.RescueDate" class="form-control" />
                 <span asp-validation-for="Animal.RescueDate" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Animal.CategoryID" class="control-label">Categorie</label>
+            <input type="hidden" asp-for="Animal.ImageUrl" />
+
+            @if (!string.IsNullOrEmpty(Model.Animal.ImageUrl))
+            {
+                <div class="form-group mb-3">
+                    <label>Poza curentă:</label><br />
+                    <img src="~/images/animals/@Model.Animal.ImageUrl" style="width: 150px; border-radius: 10px; margin-bottom: 10px;" />
+                </div>
+            }
+
+            <div class="form-group mb-3">
+                <label class="control-label">Schimbă Fotografia</label>
+                <input type="file" asp-for="AnimalImage" class="form-control" accept="image/*" />
+                <span asp-validation-for="AnimalImage" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Animal.ShelterID" class="control-label">Adăpostul unde se află</label>
+                <select asp-for="Animal.ShelterID" class="form-control" asp-items="ViewBag.ShelterID"></select>
+                <span asp-validation-for="Animal.ShelterID" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Animal.CategoryID" class="control-label">Categoria</label>
                 <select asp-for="Animal.CategoryID" class="form-control" asp-items="ViewBag.CategoryID"></select>
+                <span asp-validation-for="Animal.CategoryID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

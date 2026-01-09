@@ -11,7 +11,7 @@ using PetMatch.Models;
 
 namespace PetMatch.Pages.Shelters
 {
-    [Authorize(Roles = "Admin")]
+    
     public class IndexModel : PageModel
     {
         private readonly PetMatch.Data.PetMatchContext _context;

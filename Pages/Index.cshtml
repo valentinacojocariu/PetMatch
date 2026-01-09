@@ -4,7 +4,75 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Bun venit la PetMatch</h1>
-    <p>Locul unde prietenii necuvântători își găsesc o casă.</p>
+<style>
+    /* Ascundem bara de scroll orizontală care poate apărea accidental */
+    body {
+        overflow-x: hidden;
+    }
+
+    .hero-section {
+        background-image: url('/images/happypaws.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        /* 1. ÎNALTIME: O facem aproape cât tot ecranul */
+        min-height: 92vh;
+        /* 2. LĂȚIME COMPLETĂ (Full Width) - Truc pentru a ieși din Container */
+        width: 100vw;
+        position: relative;
+        left: 50%;
+        right: 50%;
+        margin-left: -50vw;
+        margin-right: -50vw;
+        /* 3. POZIȚIONARE SUS - Tragem imaginea peste spațiul alb */
+        margin-top: -24px;
+        /* Fără colțuri rotunjite, ca să se lipească de margini */
+        border-radius: 0;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .hero-overlay {
+        /* Un pic mai transparent ca să se vadă cățelul mai bine (0.5) */
+        background-color: rgba(255, 255, 255, 0.5);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .hero-title {
+        font-size: 4rem; /* Scris și mai mare */
+        font-weight: 800;
+        color: #2c3e50;
+        text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.9);
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="hero-section">
+    <div class="hero-overlay">
+
+        <h1 class="hero-title">Bun venit la PetMatch! 🐾</h1>
+
+        <p class="fs-3 fw-bold text-dark mt-2">
+            "TAKE A PAW(SE)!" și găsește-ți cel mai bun prieten.
+        </p>
+
+        <p class="fs-4 text-dark mb-5 fw-bold">
+            Mii de codițe fericite așteaptă o casă iubitoare.
+        </p>
+
+        <a asp-page="/Animals/Index" class="btn btn-warning btn-lg px-5 py-3 fw-bold shadow border-2 border-white">
+            Vezi Animalele Disponibile 🐶🐱
+        </a>
+
+    </div>
 </div>

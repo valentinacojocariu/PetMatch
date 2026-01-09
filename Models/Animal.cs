@@ -34,7 +34,7 @@ namespace PetMatch.Models
         [Display(Name = "Categorie")]
         public int? CategoryID { get; set; }
         public Category? Category { get; set; }
-
+        public bool IsAdopted { get; set; } = false; 
         public ICollection<AdoptionRequest>? AdoptionRequests { get; set; }
     }
 }

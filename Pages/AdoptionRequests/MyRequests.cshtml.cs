@@ -18,25 +18,28 @@ namespace PetMatch.Pages.AdoptionRequests
 
         public async Task OnGetAsync()
         {
-            // 1. Aflăm cine este logat (Emailul sau User-ul)
-            // Varianta simplă: presupunem că numele membrului sau emailul corespunde cu User.Identity.Name
-            // Sau, dacă ai legat membrul de user, filtrăm după asta.
+            var loggedInUser = User.Identity?.Name;
 
-            var currentUserEmail = User.Identity?.Name;
-
-            if (_context.AdoptionRequest != null)
+            if (string.IsNullOrEmpty(loggedInUser))
             {
-                // 2. Aducem cererile DOAR pentru acest user
-                // ATENȚIE: Aici presupunem că în tabela Members ai o coloană Email care corespunde cu login-ul
-                // Dacă nu ai, va trebui să modifici condiția .Where()
+                MyAdoptionRequests = new List<AdoptionRequest>();
+                return;
+            }
 
+            var currentMember = await _context.Member
+                .FirstOrDefaultAsync(m => m.Email == loggedInUser || m.FullName == loggedInUser);
+
+            if (currentMember != null)
+            {
                 MyAdoptionRequests = await _context.AdoptionRequest
-                    .Include(a => a.Animal)  // Să vedem numele câinelui
-                    .Include(a => a.Member)  // Să vedem datele membrului
-                                             // Filtrăm: Luăm cererile unde Email-ul membrului este egal cu cel logat
-                                             // SAU (dacă nu ai email la membru) poți scoate .Where momentan să vezi dacă merge lista
-                    .Where(r => r.Member.Email == currentUserEmail)
+                    .Include(a => a.Animal)
+                    .Include(a => a.Member)
+                    .Where(r => r.MemberID == currentMember.ID)
                     .ToListAsync();
+            }
+            else
+            {
+                MyAdoptionRequests = new List<AdoptionRequest>();
             }
         }
     }

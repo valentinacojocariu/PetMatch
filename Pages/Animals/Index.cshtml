@@ -8,11 +8,19 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-page="Create">Create New</a>
+    }
 </p>
+
 <table class="table">
     <thead>
         <tr>
+            <th>Poză</th>
+
+            <th>Adăpost</th>
+            <th>Categorie</th>
             <th>
                 @Html.DisplayNameFor(model => model.Animal[0].Name)
             </th>
@@ -25,13 +33,33 @@
             <th>
                 @Html.DisplayNameFor(model => model.Animal[0].RescueDate)
             </th>
-            <th></th>
+            <th>Acțiuni</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Animal)
-{
+        @foreach (var item in Model.Animal)
+        {
             <tr>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                    {
+                        <img src="~/images/animals/@item.ImageUrl"
+                             alt="@item.Name"
+                             style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px;" />
+                    }
+                    else
+                    {
+                        <span style="font-size: 50px;">🐶</span>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Shelter.Name)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                </td>
+
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
@@ -44,23 +72,31 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.RescueDate)
                 </td>
+
                 <td>
-                    @if (User.IsInRole("Admin"))
+                    @if (item.IsAdopted)
                     {
-                        <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> <span>|</span>
-                        <a asp-page="./Details" asp-route-id="@item.ID">Details</a> <span>|</span>
-                        <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
+                        <span class="badge bg-danger">ADOPTAT</span>
                     }
                     else
                     {
-                        <a asp-page="./Details" asp-route-id="@item.ID">Vezi Detalii</a> <span>|</span>
+                        <span class="badge bg-success">DISPONIBIL</span>
+                        <br />
+                        <a asp-page="/AdoptionRequests/Create" asp-route-animalId="@item.ID" class="btn btn-sm btn-warning mt-2">🐾 Adoptă</a>
+                        <a asp-page="./Details" asp-route-id="@item.ID" class="btn btn-sm btn-outline-info mt-2">Detalii</a>
+                    }
 
-                        <a asp-page="/AdoptionRequests/Create"
-                           asp-route-animalId="@item.ID"
-                           class="btn btn-success btn-sm">
-                            Adoptă!
-                        </a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <div class="mt-2">
+                            <small>
+                                <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
+                                <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
+                            </small>
+                        </div>
                     }
                 </td>
             </tr>
         }
+    </tbody>
+</table>

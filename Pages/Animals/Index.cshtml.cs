@@ -24,7 +24,10 @@ namespace PetMatch.Pages.Animals
 
         public async Task OnGetAsync()
         {
-            Animal = await _context.Animal.ToListAsync();
+            Animal = await _context.Animal
+                .Include(a => a.Shelter)
+                .Include(a => a.Category)
+                .ToListAsync();
         }
     }
 }

@@ -26,6 +26,10 @@
     </dl>
 </div>
 <div>
-    <a asp-page="./Edit" asp-route-id="@Model.Shelter.ID">Edit</a> |
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-page="./Edit" asp-route-id="@Model.Shelter.ID">Edit</a> 
+        <span> | </span>
+    }
     <a asp-page="./Index">Back to List</a>
 </div>

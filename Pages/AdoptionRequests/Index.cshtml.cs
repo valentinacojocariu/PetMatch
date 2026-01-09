@@ -34,15 +34,21 @@ namespace PetMatch.Pages.AdoptionRequests
             }
         }
 
-            public async Task<IActionResult> OnPostApproveAsync(int id)
+        public async Task<IActionResult> OnPostApproveAsync(int id)
         {
-            var request = await _context.AdoptionRequest.FindAsync(id);
+            var request = await _context.AdoptionRequest
+                    .Include(r => r.Animal)
+                    .FirstOrDefaultAsync(r => r.ID == id); 
             if (request != null)
             {
-                request.Status = "Approved"; 
-                await _context.SaveChangesAsync(); 
+                request.Status = "Approved";
+                if (request.Animal != null)
+                {
+                    request.Animal.IsAdopted = true;
+                }
+                await _context.SaveChangesAsync();
             }
-            return RedirectToPage(); 
+            return RedirectToPage();
         }
 
         public async Task<IActionResult> OnPostRejectAsync(int id)

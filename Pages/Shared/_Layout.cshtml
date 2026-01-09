@@ -20,33 +20,32 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">🏠 Home</a>
                         </li>
-
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Animals/Index">Animale Disponibile</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Animals/Index">🐾 Animale Disponibile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Shelters/Index">📍 Adăposturi</a>
                         </li>
 
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Categories/Index">Categorii</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Categories/Index">📂 Categorii</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Shelters/Index">Adăposturi</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Members/Index">👥 Membri</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Members/Index">Membri</a>
-                                
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-danger fw-bold" asp-area="" asp-page="/AdoptionRequests/Index">! CERERI ADOPȚIE !</a>
+                                <a class="nav-link text-danger fw-bold" asp-page="/AdoptionRequests/Index">📢 CERERI ADOPȚIE !</a>
                             </li>
                         }
-                        @if (User.Identity.IsAuthenticated)
+
+                        @if (User.Identity.IsAuthenticated && !User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-primary fw-bold" asp-page="/AdoptionRequests/MyRequests">Cererile Mele</a>
+                                <a class="nav-link text-dark" asp-page="/AdoptionRequests/MyRequests">📩 Cererile Mele</a>
                             </li>
                         }
                     </ul>
