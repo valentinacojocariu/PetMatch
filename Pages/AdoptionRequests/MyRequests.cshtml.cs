@@ -1,7 +1,7 @@
 ﻿using global::PetMatch.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using PetMatch.Models;
+
 
 namespace PetMatch.Pages.AdoptionRequests
 {

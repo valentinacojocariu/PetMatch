@@ -2,10 +2,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PetMatch.Data;
 using Microsoft.AspNetCore.Identity;
+using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 builder.Services.AddDbContext<PetMatchContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PetMatchContext") ?? throw new InvalidOperationException("Connection string 'PetMatchContext' not found.")));
 
@@ -31,6 +36,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
+app.MapControllers(); 
 
 
 app.Run();
