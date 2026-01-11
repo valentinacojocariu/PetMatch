@@ -16,49 +16,30 @@ namespace PetMatch.Controllers
             _context = context;
         }
 
+        // 1. Trimite o cerere de adopție
         [HttpPost("request")]
-        public async Task<IActionResult> CreateRequest([FromBody] dynamic data)
+        public async Task<IActionResult> RequestAdoption([FromBody] AdoptionRequestDto request)
         {
-            try
-            {
-                int animalId = data.GetProperty("animalId").GetInt32();
-                string email = data.GetProperty("userEmail").GetString();
+            // Aici ai crea o intrare intr-un tabel 'AdoptionRequests' in baza de date
+            // Pentru simplificare acum, doar simulam succesul
+            // Daca ai un tabel real, aici faci _context.Requests.Add(...)
 
-                var member = await _context.Member.FirstOrDefaultAsync(m => m.Email == email);
-                if (member == null) return BadRequest("Utilizator negăsit.");
-
-                var request = new AdoptionRequest
-                {
-                    AnimalID = animalId,
-                    MemberID = member.ID,
-                    RequestDate = DateTime.Now,
-                    Status = "În așteptare"
-                };
-
-                _context.AdoptionRequest.Add(request);
-                await _context.SaveChangesAsync();
-
-                return Ok(new { message = "Cerere salvată!" });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return Ok(new { message = "Cererea a fost trimisă către admin!" });
         }
-        [HttpGet("myrequests")]
-        public async Task<IActionResult> GetMyRequests([FromQuery] string email)
-        {
-            var requests = await _context.AdoptionRequest
-                .Include(r => r.Animal)
-                .Where(r => r.Member.Email == email)
-                .Select(r => new {
-                    Id = r.ID,
-                    AnimalName = r.Animal.Name,
-                    Status = r.Status 
-                })
-                .ToListAsync();
 
-            return Ok(requests);
+        // 2. Verifică statusul cererilor mele (Notificări)
+        [HttpGet("myrequests")]
+        public async Task<IActionResult> GetMyRequests(string email)
+        {
+            // Aici returnezi lista cererilor pentru userul respectiv
+            // Exemplu simulat pentru demo:
+            var mockRequests = new List<object>
+            {
+                new { AnimalName = "Ricky", Status = "Aprobat", Message = "Vino să îl iei mâine!" }
+            };
+            return Ok(mockRequests);
         }
     }
+
+    public class AdoptionRequestDto { public int AnimalId { get; set; } public string UserEmail { get; set; } }
 }

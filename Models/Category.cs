@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace PetMatch.Models
 {
@@ -6,9 +7,11 @@ namespace PetMatch.Models
     {
         public int ID { get; set; }
 
-        [Display(Name = "Categorie")]
-        public string CategoryName { get; set; } 
+        // AM SCHIMBAT DIN 'CategoryName' ÎN 'Name'
+        // Asta trebuie să fie aici ca să se potrivească cu ce ai modificat în Controller și Views
+        public string Name { get; set; }
 
+        [JsonIgnore]
         public ICollection<Animal>? Animals { get; set; }
     }
 }

@@ -14,7 +14,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddDbContext<PetMatchContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PetMatchContext") ?? throw new InvalidOperationException("Connection string 'PetMatchContext' not found.")));
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<PetMatchContext>();
 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using PetMatch.Models;
+using PetMatch.Models; // Asigura-te ca ai namespace-ul corect
 
 namespace PetMatch.Controllers
 {
@@ -8,35 +8,41 @@ namespace PetMatch.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
 
-        public AuthController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
+        public AuthController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
         {
-            _signInManager = signInManager;
             _userManager = userManager;
+            _signInManager = signInManager;
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterModel model)
+        {
+            var user = new IdentityUser { UserName = model.Email, Email = model.Email };
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (result.Succeeded)
+            {
+                return Ok(new { message = "Cont creat cu succes!" });
+            }
+            return BadRequest(result.Errors);
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-            // Verificăm dacă user-ul există
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null)
-            {
-                return Unauthorized(new { message = "Email sau parola gresita!" });
-            }
-
-            // Verificăm parola
-            var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
-
+            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
             if (result.Succeeded)
             {
-                // Returnăm un mesaj de succes (și eventual datele userului)
-                return Ok(new { email = user.Email, id = user.Id });
+                return Ok(new { message = "Login reușit!", email = model.Email });
             }
-
-            return Unauthorized(new { message = "Email sau parola gresita!" });
+            return Unauthorized("Email sau parolă incorectă.");
         }
     }
+
+    // Modele simple pentru datele primite de la telefon
+    public class RegisterModel { public string Email { get; set; } public string Password { get; set; } }
+    public class LoginModel { public string Email { get; set; } public string Password { get; set; } }
 }
