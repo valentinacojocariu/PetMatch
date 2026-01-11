@@ -19,27 +19,27 @@ namespace PetMatch.Controllers
             _context = context;
         }
 
-        // GET: api/Animals
-        // Returnează lista tuturor animalelor
-        [HttpGet]
+        // GET: api/Animals
+        // Returnează lista tuturor animalelor
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<Animal>>> GetAnimals()
         {
-            // Include și Shelter/Category ca să avem toate datele pe mobil
-            return await _context.Animal
-                                 .Include(a => a.Shelter)
-                                 .Include(a => a.Category)
-                                 .ToListAsync();
+            // Include și Shelter/Category ca să avem toate datele pe mobil
+            return await _context.Animal
+                .Include(a => a.Shelter)
+                .Include(a => a.Category)
+                .ToListAsync();
         }
 
-        // GET: api/Animals/5
-        // Returnează un singur animal după ID
-        [HttpGet("{id}")]
+        // GET: api/Animals/5
+        // Returnează un singur animal după ID
+        [HttpGet("{id}")]
         public async Task<ActionResult<Animal>> GetAnimal(int id)
         {
             var animal = await _context.Animal
-                                       .Include(a => a.Shelter)
-                                       .Include(a => a.Category)
-                                       .FirstOrDefaultAsync(a => a.ID == id);
+                         .Include(a => a.Shelter)
+                         .Include(a => a.Category)
+                         .FirstOrDefaultAsync(a => a.ID == id);
 
             if (animal == null)
             {
@@ -49,9 +49,9 @@ namespace PetMatch.Controllers
             return animal;
         }
 
-        // POST: api/Animals
-        // Adaugă un animal nou (pentru când vei face Create de pe mobil)
-        [HttpPost]
+        // POST: api/Animals
+        // Adaugă un animal nou (pentru când vei face Create de pe mobil)
+        [HttpPost]
         public async Task<ActionResult<Animal>> PostAnimal(Animal animal)
         {
             _context.Animal.Add(animal);
@@ -60,9 +60,9 @@ namespace PetMatch.Controllers
             return CreatedAtAction("GetAnimal", new { id = animal.ID }, animal);
         }
 
-        // DELETE: api/Animals/5
-        // Șterge un animal
-        [HttpDelete("{id}")]
+        // DELETE: api/Animals/5
+        // Șterge un animal
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAnimal(int id)
         {
             var animal = await _context.Animal.FindAsync(id);
@@ -77,9 +77,9 @@ namespace PetMatch.Controllers
             return NoContent();
         }
 
-        // PUT: api/Animals/5
-        // Modifică un animal
-        [HttpPut("{id}")]
+        // PUT: api/Animals/5
+        // Modifică un animal
+        [HttpPut("{id}")]
         public async Task<IActionResult> PutAnimal(int id, Animal animal)
         {
             if (id != animal.ID)
@@ -114,3 +114,4 @@ namespace PetMatch.Controllers
         }
     }
 }
+
